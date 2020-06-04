@@ -13,26 +13,26 @@ export default function Table(props) {
     const [paneStyle, setPaneStyle] = useState({ "display": "none" });
 
     // toggle layout whenever props change
-        useEffect(() => {
-            if (props.layoutVar === "false") {
-                setTableStyle({ "width": "100%" });
-                setPaneStyle({ "display": "none" });
-            } else if (props.layoutVar ==="true") {
-                setTableStyle({ "width": "70%" });
-                setPaneStyle({ "display": "block", "width":"30%" });
-            }
-        }, [props]);
-    
-    
+    useEffect(() => {
+        if (props.layoutVar === "false") {
+            setTableStyle({ "width": "100%" });
+            setPaneStyle({ "display": "none" });
+        } else if (props.layoutVar === "true") {
+            setTableStyle({ "width": "70%" });
+            setPaneStyle({ "display": "block", "width": "30%" });
+        }
+    }, [props]);
+
+
     // filter function for textbox element
     const filterPaneInput = (event) => {
         setFilter("show.name", event.target.value || undefined);
         setFilterInput(event.target.value);
     }
-    
+
     // filter function for checkbox elements
     const inputCheckBoxes = (event) => {
-        const filterObj = {"id":event.target.name, "value":event.target.value}
+        const filterObj = { "id": event.target.name, "value": event.target.value }
         if (event.target.checked) {
             filterCheckInput.push(filterObj);
             console.log(filterCheckInput);
@@ -43,7 +43,7 @@ export default function Table(props) {
         setAllFilters(filterCheckInput);
     }
 
-// getting data from API with params 
+    // getting data from API with params 
     useEffect(() => {
         setcCode(props.cCode);
         setschedDate(props.schedDate);
@@ -72,8 +72,8 @@ export default function Table(props) {
     const columns = React.useMemo(
         () => [
             {
-                Header: "Show ID",
-                accessor: "show.id",
+                Header: "Network Name",
+                accessor: "show.network.name",
                 disableSortBy: true,
             },
             {
@@ -146,7 +146,7 @@ export default function Table(props) {
                     ))}
                 </thead>
 
-                <tbody {...getTableBodyProps()}>
+                <tbody className="text-center" {...getTableBodyProps()}>
                     {rows.map((row, i) => {
                         prepareRow(row)
                         return (
