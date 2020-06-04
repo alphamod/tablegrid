@@ -1,0 +1,87 @@
+body {
+  padding: 0;
+  margin: 0;
+  overflow-y: hidden;
+  /* scrollbar-width: none; */
+}
+
+.sidebar {
+  width: 60px;
+  max-width: 60px;
+  height: 100%;
+  left: 0;
+  top: 0;
+  position: fixed;
+}
+.topBar {
+  height: 60px;
+  max-height: 60px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+.viewCont {
+  box-sizing: border-box !important;
+  padding-top: 70px !important;
+  padding-left: 68px !important;
+  padding-right: 8px !important;
+}
+
+.fixedTable {
+  max-height: 500px !important;
+  box-sizing: border-box;
+}
+.badge {
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+.table {
+  box-sizing: border-box;
+  max-height:500px;
+  overflow-y: auto;
+  display: block;
+  scrollbar-width: thin;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+}
+
+table th::before {
+  position: relative !important;
+  left: 0%;
+  top: 50%;
+  content: "";
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+}
+
+table th.sortAsc::before {
+  content: "\2191";
+  font-size: 1rem;
+  color: #ffff00;
+}
+table th.sortDesc::before {
+  content: "\2193";
+  font-size: 1rem;
+  color: #ffff00;
+}
+
+.filterPane {
+  height: inherit;
+  margin-left: 8px;
+  width: 30%;
+  /* background-color: rgb(75, 136, 216); */
+}
+.form-check{
+  margin-left:5rem;
+}
+.form-check-input{
+  height:1.25rem;
+  width:auto;
+}
+.form-check-label{
+  font-size: 1.25rem;
+}
