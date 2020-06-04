@@ -48,7 +48,7 @@ export default function Table(props) {
         setcCode(props.cCode);
         setschedDate(props.schedDate);
         (async () => {
-            const url = `http://api.tvmaze.com/schedule?country=${cCode}&date=${schedDate}`
+            const url = `https://api.tvmaze.com/schedule?country=${cCode}&date=${schedDate}`
             const result = await axios(url)
             setData(result.data);
         })();
