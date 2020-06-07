@@ -11,6 +11,7 @@ export default function Table(props) {
     const [filterCheckInput, setFilterCheckInput] = useState([]);
     const [tableStyle, setTableStyle] = useState({ "width": "100%" });
     const [paneStyle, setPaneStyle] = useState({ "display": "none" });
+    const [iniStateSort, setIniStateSort] = useState({ id: "", desc: "" });
 
     // toggle layout whenever props change
     useEffect(() => {
@@ -21,12 +22,32 @@ export default function Table(props) {
             setTableStyle({ "width": "70%" });
             setPaneStyle({ "display": "block", "width": "30%" });
         }
+        if (localStorage.getItem("sortObj")) {
+            const localStorSort = localStorage.getItem("sortObj");
+            setIniStateSort(JSON.parse(localStorSort));
+        }
+        if (localStorage.getItem("filterCheckBox")) {
+            const filterCheckStorage = JSON.stringify(localStorage.getItem("filterCheckBox"));
+            
+        }
+
+        if (localStorage.getItem("filterText")) {
+            const filterTextStorage = localStorage.getItem("filterText")
+            setTimeout(() => {
+                setFilter("show.name", filterTextStorage || undefined);
+            }, 2000)
+            setFilterInput(filterTextStorage);
+            setTableStyle({ "width": "70%" });
+            setPaneStyle({ "display": "block", "width": "30%" });
+            
+        }
     }, [props]);
 
 
     // filter function for textbox element
     const filterPaneInput = (event) => {
         setFilter("show.name", event.target.value || undefined);
+        localStorage.setItem("filterText", event.target.value);
         setFilterInput(event.target.value);
     }
 
@@ -40,6 +61,7 @@ export default function Table(props) {
             filterCheckInput.splice(filterObj, 1);
         }
 
+        localStorage.setItem("filterCheckBox", JSON.stringify(filterObj));
         setAllFilters(filterCheckInput);
     }
 
@@ -51,6 +73,7 @@ export default function Table(props) {
             const url = `https://api.tvmaze.com/schedule?country=${cCode}&date=${schedDate}`
             const result = await axios(url)
             setData(result.data);
+            
         })();
     }, [props, cCode, schedDate]);
 
@@ -114,6 +137,9 @@ export default function Table(props) {
             },
         ], [])
 
+    
+
+    // table hooks
     const {
         getTableProps,
         getTableBodyProps,
@@ -122,12 +148,28 @@ export default function Table(props) {
         prepareRow,
         setFilter,
         setAllFilters
-    } = useTable({ columns, data }, useFilters, useSortBy)
+    } = useTable({
+        columns, data, initialState: {
+            sortBy: [iniStateSort]
+        }
+    }, useFilters, useSortBy)
+
+    // saving sort in local storage
+    headerGroups.filter(ele => {
+        ele.headers.filter(elem => {
+            if (elem.isSorted) {
+                // console.log(elem.id, elem.isSortedDesc);
+                // console.log(elem);
+                const sortObj = JSON.stringify({ "id": elem.id, "desc": elem.isSortedDesc })
+                localStorage.setItem("sortObj", sortObj);
+                return 0;
+            }
+        })
+    });
+
     return (
         <div className="fixedTable d-flex">
-            <table style={tableStyle} className="table table-hover table-striped mt-2 mb-0 mx-0 px-0"
-
-                {...getTableProps()}>
+            <table style={tableStyle} className="table table-hover table-striped mt-2 mb-0 mx-0 px-0" {...getTableProps()}>
                 <thead className="bg-secondary text-center text-white">
                     {headerGroups.map(headerGroup => (
                         <tr {...headerGroup.getHeaderGroupProps()}>
